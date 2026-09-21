@@ -12,16 +12,18 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
+    "bcryptjs": "^3.0.3",
     "daisyui": "^5.7.37",
+    "dotenv": "^18.0.0",
     "next": "16.3.5",
     "pg": "^8.23.0",
-    "prisma": "^8.0.0-rc.15",
+    "prisma": "^7.10.0",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
-    "@types/node": "^20",
+    "@types/node": "^20.19.43",
     "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
