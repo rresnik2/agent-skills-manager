@@ -66,10 +66,10 @@ export default function Header() {
               role="button"
               className="btn btn-ghost btn-circle avatar placeholder"
             >
-              <div className="bg-primary text-primary-content w-10 rounded-full flex items-center justify-center">
-                <span className="text-lg">
-                  {user?.name?.charAt(0).toUpperCase()}
-                </span>
+              <div className="avatar">
+                <div className="w-10 rounded-full">
+                  <img alt="Tailwind-CSS-Avatar-component" src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
+                </div>
               </div>
             </div>
             <ul
@@ -82,6 +82,9 @@ export default function Header() {
               </li>
               <li>
                 <Link href="/dashboard/skills/new">Create Skill</Link>
+              </li>
+              <li>
+                <Link href="/profile">Profile</Link>
               </li>
               <li>
                 <button onClick={logout}>Logout</button>

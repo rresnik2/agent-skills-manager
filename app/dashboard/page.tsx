@@ -89,11 +89,11 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 text-base-content/70">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-black mt-1">
+          <p className="mt-1">
             Welcome back, {user?.name}!
           </p>
         </div>
