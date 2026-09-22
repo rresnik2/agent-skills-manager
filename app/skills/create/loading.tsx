@@ -1,12 +1,9 @@
-// app/skills/loading.tsx
-export default function SkillsLoading() {
+export default function GlobalLoading() {
   return (
-    <div className="p-6 max-w-md mx-auto my-8">
-      <div className="card bg-base-100 border border-base-300">
-        <div className="card-body">
-          <div className="skeleton bg-red-300 h-6 w-3/4"></div>
-          <div className="skeleton bg-blue-300 h-4 w-full mt-2"></div>
-        </div>
+    <div className="min-h-[50vh] flex items-center justify-center">
+      <div className="text-center">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+        <p className="mt-4 text-base-content/70">Loading...</p>
       </div>
     </div>
   );
