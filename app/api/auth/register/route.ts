@@ -1,19 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, generateToken, setAuthCookie } from "@/lib/auth";
+import { z } from "zod";
+import { registerSchema } from "@/lib/validation";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, password, name } = body;
 
     // Validate input
-    if (!email || !password || !name) {
+    const result = registerSchema.safeParse(body);
+    if (!result.success) {
       return NextResponse.json(
-        { error: "Email, password, and name are required" },
+        { error: "Invalid input", details: z.flattenError(result.error) },
         { status: 400 }
       );
     }
+    const { email, password, name } = result.data;
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({

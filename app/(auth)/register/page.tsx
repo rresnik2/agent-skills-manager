@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
+import { z } from "zod";
+import { registerFormSchema, RegisterFieldErrors } from "@/lib/validation";
+
 
 /**
  * Register Page - CSR (Client-Side Rendering)
@@ -18,6 +21,7 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<RegisterFieldErrors>({});
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -30,20 +34,17 @@ export default function RegisterPage() {
     e.preventDefault();
     setError("");
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
+    const result = registerFormSchema.safeParse({ name, email, password, confirmPassword });
+    if (!result.success) {
+      setFieldErrors(z.flattenError(result.error).fieldErrors);
       return;
     }
-
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return;
-    }
-
+    setFieldErrors({});
     setIsSubmitting(true);
 
     try {
-      await register({ email, password, name });
+      const { confirmPassword: _, ...data } = result.data;
+      await register(data);
       router.push("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
@@ -59,7 +60,7 @@ export default function RegisterPage() {
         Join to create and share agent skills
       </p>
 
-      <form onSubmit={handleSubmit} className="mt-4">
+      <form onSubmit={handleSubmit} className="mt-4" noValidate>
         {error && (
           <div className="alert alert-error mb-4">
             <span>{error}</span>
@@ -71,13 +72,12 @@ export default function RegisterPage() {
             <span className="label-text">Name</span>
           </label>
           <input
-            type="text"
             placeholder="Your name"
             className="input input-bordered w-full"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
           />
+          {fieldErrors.name?.[0] && <span className="text-error text-sm">{fieldErrors.name[0]}</span>}
         </div>
 
         <div className="form-control mt-4">
@@ -85,13 +85,13 @@ export default function RegisterPage() {
             <span className="label-text">Email</span>
           </label>
           <input
-            type="email"
             placeholder="you@example.com"
             className="input input-bordered w-full"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
+            type="email"
           />
+          {fieldErrors.email?.[0] && <span className="text-error text-sm">{fieldErrors.email[0]}</span>}
         </div>
 
         <div className="form-control mt-4">
@@ -99,14 +99,13 @@ export default function RegisterPage() {
             <span className="label-text">Password</span>
           </label>
           <input
-            type="password"
             placeholder="••••••••"
             className="input input-bordered w-full"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
+            type="password"
           />
+          {fieldErrors.password?.[0] && <span className="text-error text-sm">{fieldErrors.password[0]}</span>}
         </div>
 
         <div className="form-control mt-4">
@@ -114,13 +113,13 @@ export default function RegisterPage() {
             <span className="label-text">Confirm Password</span>
           </label>
           <input
-            type="password"
             placeholder="••••••••"
             className="input input-bordered w-full"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            required
+            type="password"
           />
+          {fieldErrors.confirmPassword?.[0] && <span className="text-error text-sm">{fieldErrors.confirmPassword[0]}</span>}
         </div>
 
         <div className="form-control mt-6">
